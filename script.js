@@ -17,7 +17,7 @@ $(document).ready(function(){
             } 
         });
 
-        // AJAX for Four Day Forecast
+        // AJAX for Five Day Forecast
         $.ajax({
             url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&APPID=7519ccef7e06a4380f78e8f38bfc182c",
             type: "GET",
@@ -45,6 +45,7 @@ $(document).ready(function(){
 
 //Show the forcast for today
 function today(data) {
+    //console.log(data);
     return "<h2>" + data.name + ", " + data.sys.country + "</h2>" +
            "<h3>Today's forecast:  <img src='http://openweathermap.org/img/wn/" + data.weather[0].icon +".png'>" + data.weather[0].main + "</h3>" +
            "<h4>Temperature:  " + data.main.temp + " ˚F</h4>" +
@@ -54,10 +55,14 @@ function today(data) {
            "<h4>Cloudiness:  " + data.clouds.all + " %</h4>";
 }
 
-// Show the forcast for next four days
+// Show the forcast for next five days
 function forecast(data) {
-    return "<h3>Today's forecast:  <img src='http://openweathermap.org/img/wn/" + data.list[0].weather[0].icon +".png'>" + data.list[0].weather[0].main + "</h3>" +
-           "<h4>Temperature:  " + data.list[0].main.temp + " ˚F</h4>" +
-           "<h4>Humidity:  " + data.list[0].main.humidity + " %</h4>" +
-           "<h4>Cloudiness:  " + data.list[0].clouds.all + " %</h4>";
+    //console.log(data);
+    for(var i = 9; i < 40; i += 8) {
+        $("#forecast").append("<h5>Date: " + data.list[i].dt_txt + "</h5>")
+        $("#forecast").append("<h3>Forecast:  <img src='http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon +".png'>" + data.list[i].weather[0].main + "</h3>") +
+        $("#forecast").append("<h4>Temperature:  " + data.list[i].main.temp + " ˚F</h4>") +
+        $("#forecast").append("<h4>Humidity:  " + data.list[i].main.humidity + " %</h4>") +
+        $("#forecast").append("<h4>Cloudiness:  " + data.list[i].clouds.all + " %</h4>");
+    }
 }
