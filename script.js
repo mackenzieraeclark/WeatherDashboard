@@ -1,47 +1,47 @@
 // api key: 7519ccef7e06a4380f78e8f38bfc182c
 
-$(document).ready(function(){
-    $("#search-button").click(function(){
-        var city = $("#search-value").val();
+$("#search-button").click(function(){
+    var city = $("#search-value").val();
 
-        // AJAX for Today's Forecast
-        $.ajax({
-            url: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&APPID=7519ccef7e06a4380f78e8f38bfc182c",
-            type: "GET",
-            dataType: "jsonp", // Needed to call API
-            success: function for1(data){ // call back
+    // AJAX for Today's Forecast
+    $.ajax({
+        url: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&APPID=7519ccef7e06a4380f78e8f38bfc182c",
+        type: "GET",
+        dataType: "jsonp", // Needed to call API
+        success: function for1(data){ // call back
 
-                // Todays Forecast
-                var widget1 = today(data);
-                $("#today").html(widget1);
-            } 
-        });
+            // Todays Forecast
+            var widget1 = today(data);
+            $("#today").html(widget1);
+        } 
+    });
 
-        // AJAX for Five Day Forecast
-        $.ajax({
-            url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&APPID=7519ccef7e06a4380f78e8f38bfc182c",
-            type: "GET",
-            dataType: "jsonp", // Needed to call API
-            success: function for2(data){ // call back
+    // AJAX for Five Day Forecast
+    $.ajax({
+        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&APPID=7519ccef7e06a4380f78e8f38bfc182c",
+        type: "GET",
+        dataType: "jsonp", // Needed to call API
+        success: function for2(data){ // call back
 
-                // 5 day Forecast
-                var widget2 = forecast(data);
-                $("#forecast").html(widget2);
-            } 
-        });
+            // 5 day Forecast
+            var widget2 = forecast(data);
+            $("#forecast").html(widget2);
+        } 
+    });
 
-        // Check to see if user did not input a city
-        if(city = city){
-            // Empty field when user clicks button
-            $("#search-value").val('');
-        } else{
-            // Create error message
-            $("#error").html('Please enter a city to search.');
-            // Also empty field
-            $("#search-value").val('');
-        }
-    })
-});
+    // Check to see if user did not input a city
+    if(city = city){
+        // Save input to local storage
+        localStorage.setItem("history", city.val());
+        // Empty field when user clicks button
+        $("#search-value").val('');
+    } else{
+        // Create error message
+        $("#error").html('Please enter a city to search.');
+        // Also empty field
+        $("#search-value").val('');
+    }
+})
 
 //Show the forcast for today
 function today(data) {
@@ -65,4 +65,11 @@ function forecast(data) {
         $("#forecast").append("<h4>Humidity:  " + data.list[i].main.humidity + " %</h4>") +
         $("#forecast").append("<h4>Cloudiness:  " + data.list[i].clouds.all + " %</h4>");
     }
+}
+
+// Show search history and make clickable
+// id="listHistory" section
+function showHistory() {
+    var storedVal = localStorage.getItem("history");
+    $("#listHistory").append("<li>" + storedVal + "</li>");
 }
