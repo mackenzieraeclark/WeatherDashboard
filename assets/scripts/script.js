@@ -1,11 +1,16 @@
-// api key: 7519ccef7e06a4380f78e8f38bfc182c
+var apiKey = "7519ccef7e06a4380f78e8f38bfc182c";
+
+$( document ).ready(function() {
+    showHistory();
+});
 
 $("#search-button").click(function(){
     var city = $("#search-value").val();
+    console.log("button-clicked");
 
     // AJAX for Today's Forecast
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&APPID=7519ccef7e06a4380f78e8f38bfc182c",
+        url: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&APPID=" + apiKey,
         type: "GET",
         dataType: "jsonp", // Needed to call API
         success: function for1(data){ // call back
@@ -18,7 +23,7 @@ $("#search-button").click(function(){
 
     // AJAX for Five Day Forecast
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&APPID=7519ccef7e06a4380f78e8f38bfc182c",
+        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&APPID=" + apiKey,
         type: "GET",
         dataType: "jsonp", // Needed to call API
         success: function for2(data){ // call back
@@ -30,9 +35,9 @@ $("#search-button").click(function(){
     });
 
     // Check to see if user did not input a city
-    if(city = city){
+    if(city !== ""){
         // Save input to local storage
-        localStorage.setItem("history", city.val());
+        localStorage.setItem("history", city);
         // Empty field when user clicks button
         $("#search-value").val('');
     } else{
@@ -41,19 +46,21 @@ $("#search-button").click(function(){
         // Also empty field
         $("#search-value").val('');
     }
-})
+
+    showHistory();
+});
 
 //Show the forcast for today
 function today(data) {
     //console.log(data);
     return "<h2>" + data.name + ", " + data.sys.country + "</h2>" +
-           "<h3>Today's forecast:  <img src='http://openweathermap.org/img/wn/" + data.weather[0].icon +".png'>" + data.weather[0].main + "</h3>" +
-           "<h4>Temperature:  " + data.main.temp + " ˚F</h4>" +
-           "<h5>High of:  " + data.main.temp_max + " ˚F</h5>" +
-           "<h5>Low of:  " + data.main.temp_min + " ˚F</h5>" +
-           "<h4>Humidity:  " + data.main.humidity + " %</h4>" +
-           "<h4>Cloudiness:  " + data.clouds.all + " %</h4>";
-}
+            "<h3>Today's forecast:  <img src='http://openweathermap.org/img/wn/" + data.weather[0].icon +".png'>" + data.weather[0].main + "</h3>" +
+            "<h4>Temperature:  " + data.main.temp + " ˚F</h4>" +
+            "<h5>High of:  " + data.main.temp_max + " ˚F</h5>" +
+            "<h5>Low of:  " + data.main.temp_min + " ˚F</h5>" +
+            "<h4>Humidity:  " + data.main.humidity + " %</h4>" +
+            "<h4>Cloudiness:  " + data.clouds.all + " %</h4>";
+};
 
 // Show the forcast for next five days
 function forecast(data) {
@@ -65,11 +72,13 @@ function forecast(data) {
         $("#forecast").append("<h4>Humidity:  " + data.list[i].main.humidity + " %</h4>") +
         $("#forecast").append("<h4>Cloudiness:  " + data.list[i].clouds.all + " %</h4>");
     }
-}
+};
 
 // Show search history and make clickable
-// id="listHistory" section
+// id="listHistory"
 function showHistory() {
     var storedVal = localStorage.getItem("history");
+    console.log("Local Storage: ", localStorage);
+    console.log("Stored Val:", storedVal);
     $("#listHistory").append("<li>" + storedVal + "</li>");
-}
+};
